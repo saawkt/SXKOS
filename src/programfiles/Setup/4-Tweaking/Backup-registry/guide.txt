@@ -1,0 +1,3 @@
+1. open as administrator
+2. a .reg will be saved on your desktop
+3. to use run with nsudo or powerrun
