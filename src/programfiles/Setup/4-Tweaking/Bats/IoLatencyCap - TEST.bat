@@ -5,7 +5,7 @@ color a
 :home
 cls
 echo ----------------------------------------
-echo - 1) IoLatencyCap (KernelOS Default)   -
+echo - 1) IoLatencyCap (SXKOS Default)      -
 echo - 2) IoLatencyCap (Windows Default)    -
 echo - 3) IoLatencyCap 14 (20ms)            -
 echo - 4) IoLatencyCap 32 (50ms)            -

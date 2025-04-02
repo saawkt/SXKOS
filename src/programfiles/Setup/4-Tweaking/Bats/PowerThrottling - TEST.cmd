@@ -18,7 +18,7 @@ echo.
 echo AT THE END OF THE SCRIPT YOUR PC WILL RESTART.
 echo.
 echo --------------------------------------------------
-echo - 1. Disable Power Throttling (Default KernelOS) -
+echo - 1. Disable Power Throttling (Default SXKOS)    -
 echo - 2. Enable Power Throttling (Default Windows)   -
 echo --------------------------------------------------
 set /p menu2=:

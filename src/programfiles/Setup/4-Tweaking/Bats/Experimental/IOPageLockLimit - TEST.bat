@@ -7,7 +7,7 @@ cls
 echo.
 echo This is experimental, it may cause unknown problems.
 echo Performance may vary and it is recommended to test it, 
-echo the default value used in previous KernelOS versions was the maximum value (opt 3).
+echo the default value used in previous SXKOS versions was the maximum value (opt 3).
 echo ---------------------------------
 echo Some of the problems that can occur are Stuttering, Micro-Stuttering, 
 echo general ISO performance problems when running apps.

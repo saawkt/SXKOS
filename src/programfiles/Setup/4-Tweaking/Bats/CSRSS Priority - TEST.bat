@@ -5,10 +5,10 @@ color a
 :home
 cls
 echo --------------------------------------
-echo - 1) RealTime (OLD KernelOS Default) -
+echo - 1) RealTime                   -
 echo - 2) High			     -
 echo - 3) Above Normal		     -
-echo - 4) Normal		             -
+echo - 4) Normal		     -
 echo - 5) Below Normal		     -
 echo --------------------------------------
 echo.

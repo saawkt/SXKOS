@@ -1,5 +1,5 @@
 @echo off
-title TSCSYNCPOLICY - KernelOS
+title TSCSYNCPOLICY - SXKOS
 color a
 :home
 cls
