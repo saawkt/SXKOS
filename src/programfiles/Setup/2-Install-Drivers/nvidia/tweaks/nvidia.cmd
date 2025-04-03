@@ -1,12 +1,11 @@
 @echo off
-TITLE profile nvidia by sysnyxx
-echo profile nvidia
+TITLE nvidia tweaker by sysnyxx
 
 :: download files
-echo downloading nvidia profile inspector
-curl -g -k -L -# -o "C:\Windows\Temp\npi.exe" "https://cdn.discordapp.com/attachments/1342571971627585606/1342577845611794573/nvidiaProfileInspector.exe?ex=67ba248e&is=67b8d30e&hm=8caafccbc591968a9efe90da33abbb56977904e0ad06202497c219e00488bd11&" >NUL 2>&1
-
-curl -g -k -L -# -o "C:\Windows\Temp\reg.reg" "https://cdn.discordapp.com/attachments/1342571971627585606/1342607325717860412/reg_nvidia.reg?ex=67ba4002&is=67b8ee82&hm=0fa5b18d44aaf83897dca70c86445d9913f13cf78995d5fec5268c1485f427d4&" >NUL 2>&1
+echo downloading nvidia profile inspector and regs
+powershell Invoke-WebRequest -Uri "https://github.com/wasynxyxxk/files/raw/refs/heads/main/nvidia/nvidiaProfileInspector.exe" -OutFile "C:\Windows\Temp\npi.exe"
+powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/wasynxyxxk/files/refs/heads/main/nvidia/reg_nvidia.reg" -OutFile "C:\Windows\Temp\reg.reg"
+cls
 
 :: tweaks
 regedit /s C:\Windows\Temp\reg.reg
@@ -32,36 +31,92 @@ for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PC
                 )
              )
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\Startup" /v "SendTelemetryData" /t REG_DWORD /d "0" /f
+cls
 
 :menu
 cls
-echo Escolha uma opção:
-echo 1 - Basic Profile (Recommended) - Perfil Basico(Recomendado)
-echo 2 - Fps Average Profile - Perfil para fps
-set /p escolha="Digite sua escolha (1 ou 2): "
+echo Choose an option:
+echo 1 - Basic Profile (Recommended)
+echo 2 - Fps Average 
+echo 3 - Advanced profiles
+set /p input="Enter your choice (1 or 2): "
 
-if "%escolha%"=="1" (
+if "%input%"=="1" (
     goto basic
-) else if "%escolha%"=="2" (
+) else if "%input%"=="2" (
     goto fps
+) else if "%input%"=="3" (
+    goto adprofiles
 ) else (
-    echo Escolha inválida. Tente novamente.
+    echo invalid choice. try again.
     pause
     goto menu
 )
 
 :basic
-curl -g -k -L -# -o "C:\Windows\Temp\basic.nip" "https://cdn.discordapp.com/attachments/1342571971627585606/1342577636169482312/basic.nip?ex=67ba245c&is=67b8d2dc&hm=943f947153ee87ac403f73bf0d2f93ca4e18788bf8931228a947f176239e52aa&" >NUL 2>&1
+cls
+powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/wasynxyxxk/files/refs/heads/main/nvidia/basic.nip" -OutFile "C:\Windows\Temp\basic.nip"
 "C:\Windows\Temp\npi.exe" "C:\Windows\Temp\basic.nip" >nul 2>&1
 cd /d C:\Windows\Temp >nul 2>&1
 del /f /q npi.exe >nul 2>&1
 del /f /q basic.nip >nul 2>&1
+echo done
+timeout /t 2 /nobreak >NUL 2>&1
 exit /b
 
 :fps
-curl -g -k -L -# -o "C:\Windows\Temp\fps.nip" "https://cdn.discordapp.com/attachments/1342571971627585606/1342577636592844861/fps_average.nip?ex=67ba245c&is=67b8d2dc&hm=746a2f9e79ec13312679f3eb8e7465962b429aa511ade61ff5126afc8223619d&" >NUL 2>&1
+cls
+powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/wasynxyxxk/files/refs/heads/main/nvidia/fps.nip" -OutFile "C:\Windows\Temp\fps.nip"
 "C:\Windows\Temp\npi.exe" "C:\Windows\Temp\fps.nip" >nul 2>&1
 cd /d C:\Windows\Temp >nul 2>&1
 del /f /q npi.exe >nul 2>&1
 del /f /q fps.nip >nul 2>&1
+echo done
+timeout /t 2 /nobreak >NUL 2>&1
 exit /b
+
+:adprofiles
+cls
+echo these profiles are still being tested, they may decrease the performance of your GPU and not work with all games
+echo. 
+echo Choose an option:
+echo 1 - Advanced
+echo 2 - Latency 
+echo 3 - Main Profiles
+set /p input="Enter your choice (1 or 2): "
+
+if "%input%"=="1" (
+    goto advanced
+) else if "%input%"=="2" (
+    goto latency
+) else if "%input%"=="3" (
+    goto menu
+) else (
+    echo invalid choice. try again.
+    pause
+    goto menu
+)
+
+:latency
+cls
+powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/wasynxyxxk/files/refs/heads/main/nvidia/latency.nip" -OutFile "C:\Windows\Temp\latency.nip"
+"C:\Windows\Temp\npi.exe" "C:\Windows\Temp\latency.nip" >nul 2>&1
+cd /d C:\Windows\Temp >nul 2>&1
+del /f /q npi.exe >nul 2>&1
+del /f /q latency.nip >nul 2>&1
+echo done
+timeout /t 2 /nobreak >NUL 2>&1
+exit /b
+
+:advanced
+cls
+powershell Invoke-WebRequest -Uri "https://raw.githubusercontent.com/wasynxyxxk/files/refs/heads/main/nvidia/advanced.nip" -OutFile "C:\Windows\Temp\advanced.nip"
+"C:\Windows\Temp\npi.exe" "C:\Windows\Temp\advanced.nip" >nul 2>&1
+cd /d C:\Windows\Temp >nul 2>&1
+del /f /q npi.exe >nul 2>&1
+del /f /q advanced.nip >nul 2>&1
+echo done
+timeout /t 2 /nobreak >NUL 2>&1
+exit /b
+
+
