@@ -402,7 +402,7 @@
 			<component name="Microsoft-Windows-Shell-Setup">
 				<OEMInformation>
 					<Manufacturer>saawkt</Manufacturer>
-					<Model>TestOS</Model>
+					<Model>SXK-OS</Model>
 					<SupportURL>https://discord.gg/zF3kqsyGvB</SupportURL>
 				</OEMInformation>
 				<OOBE>
@@ -416,7 +416,7 @@
 		</settings>
 		<settings pass="specialize">
 			<component name="Microsoft-Windows-Shell-Setup">
-				<ComputerName>TestOS-Desktop</ComputerName>
+				<ComputerName>SXKOS-Desktop</ComputerName>
 			</component>
 		</settings>
 		<settings pass="windowsPE">
@@ -685,7 +685,7 @@
 			<Task>imageOptionsSkipPrompt</Task>
 		</ImageTasks>
 		<AutoIsoFile>C:\NTlite.iso</AutoIsoFile>
-		<AutoIsoLabel>TestOS</AutoIsoLabel>
+		<AutoIsoLabel>SXK-OS</AutoIsoLabel>
 		<AutoSplitSize>4000</AutoSplitSize>
 	</ApplyOptions>
 	<Execution BeforeLogonMode="0">

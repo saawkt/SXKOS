@@ -1,5 +1,5 @@
 @echo off
-title cleanup, made by vzyssxs and ssos
+title cleanup, made by saawkt
 del "%HOMEPATH%\AppData\Local\updater.log" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\UserProducts.xml" >nul 2>&1
 del "%SYSTEMROOT%\Logs\DirectX.log" >nul 2>&1
