@@ -863,8 +863,6 @@ powercfg /hibernate off
 :: BlitzOS Script (Spectre meltdown)
 wmic cpu get name | findstr "Intel" >nul && (
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f
-cd /d C:\bin\2
-regedit /s vulnerabledriver.reg
 move "C:\bin\3\xhci.cmd" "%ProgramData%\Microsoft\Windows\Start Menu\Programs\StartUp"
 )
 wmic cpu get name | findstr "AMD" >nul && (

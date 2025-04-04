@@ -1838,5 +1838,8 @@ C2,0A,01,D2,1E,26,4D,00,69,00,63,00,72,00,6F,00,73,00,6F,00,66,00,74,00,2E,\
 
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation]
 "Manufacturer"="saawkt"
-"Model"="TestOS"
+"Model"="SXKOS"
 "SupportURL"="https://discord.gg/zF3kqsyGvB"
+
+[HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Control\CI\Config]
+"VulnerableDriverBlocklistEnable"=dword:00000000
