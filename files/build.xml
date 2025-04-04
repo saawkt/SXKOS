@@ -402,7 +402,7 @@
 			<component name="Microsoft-Windows-Shell-Setup">
 				<OEMInformation>
 					<Manufacturer>saawkt</Manufacturer>
-					<Model>SXK-OS</Model>
+					<Model>SXKOS</Model>
 					<SupportURL>https://discord.gg/zF3kqsyGvB</SupportURL>
 				</OEMInformation>
 				<OOBE>
@@ -685,7 +685,7 @@
 			<Task>imageOptionsSkipPrompt</Task>
 		</ImageTasks>
 		<AutoIsoFile>C:\NTlite.iso</AutoIsoFile>
-		<AutoIsoLabel>SXK-OS</AutoIsoLabel>
+		<AutoIsoLabel>SXKOS</AutoIsoLabel>
 		<AutoSplitSize>4000</AutoSplitSize>
 	</ApplyOptions>
 	<Execution BeforeLogonMode="0">
