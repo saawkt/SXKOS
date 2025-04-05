@@ -1,18 +1,19 @@
 @echo off
-@title "Post-Install W11"
+@title "SXKOS 23H2 Post-Script"
 SETLOCAL EnableDelayedExpansion
 
 taskkill /im explorer.exe /f >nul 2>&1
-reg add "HKCR\Directory\background\shell\Item2" /v "MUIVerb" /t REG_SZ /d "dev sysnyxx" /f >NUL 2>&1
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion" /v "RegisteredOrganization" /t REG_SZ /d "dev sysnyxx" /f >NUL 2>&1
 powercfg -import "C:\Windows\co.pow" b0a71852-3be4-43b1-9aff-70d3c8430794
 powercfg /s b0a71852-3be4-43b1-9aff-70d3c8430794
 powershell set-executionpolicy unrestricted -force >nul 2>&1
 setx POWERSHELL_TELEMETRY_OPTOUT 1 >nul 2>&1
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v "Debugger" /t REG_SZ /d "." /f >nul 2>&1
-label C: SXKOS-23H2-2.0.0
-bcdedit /set {current} description "SXKOS-23H2-2.0.0"
+label C: SXKOS-23H2-2.3.2
+bcdedit /set {current} description "SXKOS-23H2-2.3.2"
 cls
+
+:: Startup
+move "C:\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 
 :: installers
 echo Installing Visual C++
@@ -23,17 +24,29 @@ echo Installing DirectX
 cd /d "C:\bin\1" >NUL 2>&1
 start /min /wait DirectX\#install.bat >NUL 2>&1
 timeout /t 5 /nobreak >NUL 2>&1
+cls
 
 echo Installing 7z
 start /b /wait "" "C:\bin\1\7z2401-x64.msi" /passive >nul 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\7-Zip"
+cls
 
-::lightshot
-echo installing lightshot
-call "C:\bin\1\lightshot.exe" /VERYSILENT /NORESTART
+:: Lightshot
+echo Installing Lightshot
+start "C:\bin\1\lightshot.exe" /VERYSILENT /NORESTART
 timeout /t 2 /nobreak >NUL 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Lightshot" >nul 2>&1
 rd /s /q "C:\Program Files (x86)\Skillbrains\Updater" >nul 2>&1
+cls
+
+:: Open-Shell
+echo Installing Open-Shell
+start C:\Windows\Temp\openshell.exe /qn ADDLOCAL=StartMenu
+timeout /t 2 /nobreak >NUL 2>&1
+"C:\Program Files\Open-Shell\StartMenu.exe" -xml "C:\bin\2\config.xml"
+cls
+PowerRun.exe /SW:0 taskkill.exe /im "StartMenuExperienceHost.exe" /t /f
+PowerRun.exe /SW:0 powershell.exe Rename-Item -Path "C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe" -NewName "StartMenuExperienceHost.old"
 
 :: 7zip settings
 Reg.exe add "HKCU\Software\7-Zip\FM\Columns" /v "RootFolder" /t REG_BINARY /d "0100000000000000010000000400000001000000A0000000" /f
@@ -520,11 +533,6 @@ Reg.exe add "HKLM\Software\Classes\7-Zip.zip\shell" /ve /t REG_SZ /d "" /f
 Reg.exe add "HKLM\Software\Classes\7-Zip.zip\shell\open" /ve /t REG_SZ /d "" /f
 Reg.exe add "HKLM\Software\Classes\7-Zip.zip\shell\open\command" /ve /t REG_SZ /d "\"C:\Program Files\7-Zip\7zFM.exe\" \"%%1\"" /f
 cls
-
-start /b /wait "" "C:\bin\1\Visual-C-Runtimes-All-in-One-Nov-2023\install_all.bat" >nul 2>&1
-
-::DWMEnableMMCSS
-move "C:\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 
 ::Eliminar cosas inutiles
 cls
