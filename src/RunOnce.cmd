@@ -1291,7 +1291,21 @@ Reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.j
 Reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\.png\UserChoice" /v "ProgId" /t REG_SZ /d "PhotoViewer.FileAssoc.Tiff" /f
 cls
 
-:: done
+:: SearchHost and Mobsync
+cd %systemdrive%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy
+takeown /f "SearchHost.exe"
+icacls "%systemdrive%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\SearchHost.exe" /grant Administrators:F
+ren SearchHost.exe SearchHost.old
+taskkill /f /im SearchHost.exe /t
+cd %systemdrive%\Windows\System32
+takeown /f "mobsync.exe"
+icacls "%systemdrive%\Windows\System32\mobsync.exe" /grant Administrators:F
+ren mobsync.exe mobsync.old
+
+:: Gamebar Presence Writer
+reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d "0" /f
+
+:: Cleanup
 del "%HOMEPATH%\AppData\Local\updater.log" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\UserProducts.xml" >nul 2>&1
 del "%SYSTEMROOT%\Logs\DirectX.log" >nul 2>&1
