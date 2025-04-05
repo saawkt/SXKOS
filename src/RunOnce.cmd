@@ -14,6 +14,7 @@ cls
 
 :: Startup
 move "C:\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+cls
 
 :: installers
 echo Installing Visual C++
@@ -41,7 +42,7 @@ cls
 
 :: Open-Shell
 echo Installing Open-Shell
-start C:\Windows\Temp\openshell.exe /qn ADDLOCAL=StartMenu
+start C:\bin\1\openshell.exe /qn ADDLOCAL=StartMenu
 timeout /t 2 /nobreak >NUL 2>&1
 "C:\Program Files\Open-Shell\StartMenu.exe" -xml "C:\bin\2\config.xml"
 cls
@@ -871,6 +872,7 @@ powercfg /hibernate off
 :: BlitzOS Script (Spectre meltdown)
 wmic cpu get name | findstr "Intel" >nul && (
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 0 /f
 move "C:\bin\3\xhci.cmd" "%ProgramData%\Microsoft\Windows\Start Menu\Programs\StartUp"
 )
 wmic cpu get name | findstr "AMD" >nul && (
