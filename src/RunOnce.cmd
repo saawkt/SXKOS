@@ -8,8 +8,8 @@ powercfg /s b0a71852-3be4-43b1-9aff-70d3c8430794
 powershell set-executionpolicy unrestricted -force >nul 2>&1
 setx POWERSHELL_TELEMETRY_OPTOUT 1 >nul 2>&1
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v "Debugger" /t REG_SZ /d "." /f >nul 2>&1
-label C: SXKOS-23H2-2.3.2
-bcdedit /set {current} description "SXKOS-23H2-2.3.2"
+label C: SXKOS-23H2-2.3.4
+bcdedit /set {current} description "SXKOS-23H2-2.3.4"
 cls
 
 :: Startup
@@ -32,9 +32,8 @@ start /b /wait "" "C:\bin\1\7z2401-x64.msi" /passive >nul 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\7-Zip"
 cls
 
-:: Lightshot
 echo Installing Lightshot
-start "C:\bin\1\lightshot.exe" /VERYSILENT /NORESTART
+call "C:\bin\1\lightshot.exe" /VERYSILENT /NORESTART
 timeout /t 2 /nobreak >NUL 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Lightshot" >nul 2>&1
 rd /s /q "C:\Program Files (x86)\Skillbrains\Updater" >nul 2>&1
