@@ -1315,6 +1315,9 @@ ren mobsync.exe mobsync.old
 reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d "0" /f
 
 :: Cleanup
+cd /d C:\bin
+rmdir /s /q "1" >nul 2>&1
+mkdir "1" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\updater.log" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\UserProducts.xml" >nul 2>&1
 del "%SYSTEMROOT%\Logs\DirectX.log" >nul 2>&1
