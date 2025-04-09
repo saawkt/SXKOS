@@ -191,6 +191,7 @@ Reg.exe add "HKEY_CURRENT_USER\SOFTWARE\Microsoft\GameBar" /v "UseNexusForGameBa
 Reg.exe delete "HKEY_CLASSES_ROOT\*\shell\pintohomefile" /f
 Reg.exe delete "HKEY_CLASSES_ROOT\Folder\shell\pintohome" /f
 Reg.exe add "HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\microphone" /v "Value" /t REG_SZ /d "Allow" /f
+reg add "HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo" /ve /d "" /f
 
 for /f "delims=" %%a in ('powershell -NoLogo -NoProfile -NonInteractive -Command "Get-NetAdapter | ForEach-Object { Disable-NetAdapterBinding -Name $_.Name -ComponentID 'ms_lldp','ms_lltdio','ms_implat','ms_rspndr','ms_tcpip6','ms_server','ms_msclient' }"') do (
     echo %%a
