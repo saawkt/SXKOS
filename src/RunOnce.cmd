@@ -13,27 +13,27 @@ bcdedit /set {current} description "SXKOS-23H2-2.4.0"
 cls
 
 :: Startup
-move "C:\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+move "C:\ProgramData\SXKOS\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 cls
 
 :: installers
 echo Installing Visual C++
-start /b /wait "" "C:\bin\1\Visual-C-Runtimes-All-in-One-Nov-2023\install_all.bat" >nul 2>&1
+start /b /wait "" "C:\ProgramData\SXKOS\bin\1\Visual-C-Runtimes-All-in-One-Nov-2023\install_all.bat" >nul 2>&1
 cls
 
 echo Installing DirectX
-cd /d "C:\bin\1" >NUL 2>&1
+cd /d "C:\ProgramData\SXKOS\bin\1" >NUL 2>&1
 start /min /wait DirectX\#install.bat >NUL 2>&1
 timeout /t 5 /nobreak >NUL 2>&1
 cls
 
 echo Installing 7z
-start /b /wait "" "C:\bin\1\7z2401-x64.msi" /passive >nul 2>&1
+start /b /wait "" "C:\ProgramData\SXKOS\bin\1\7z2401-x64.msi" /passive >nul 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\7-Zip"
 cls
 
 echo Installing Lightshot
-call "C:\bin\1\lightshot.exe" /VERYSILENT /NORESTART
+call "C:\ProgramData\SXKOS\bin\1\lightshot.exe" /VERYSILENT /NORESTART
 timeout /t 2 /nobreak >NUL 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Lightshot" >nul 2>&1
 rd /s /q "C:\Program Files (x86)\Skillbrains\Updater" >nul 2>&1
@@ -41,9 +41,9 @@ cls
 
 :: Open-Shell
 echo Installing Open-Shell
-start C:\bin\1\openshell.exe /qn ADDLOCAL=StartMenu
+start C:\ProgramData\SXKOS\bin\1\openshell.exe /qn ADDLOCAL=StartMenu
 timeout /t 2 /nobreak >NUL 2>&1
-"C:\Program Files\Open-Shell\StartMenu.exe" -xml "C:\bin\2\config.xml"
+"C:\Program Files\Open-Shell\StartMenu.exe" -xml "C:\ProgramData\SXKOS\bin\2\config.xml"
 cls
 PowerRun.exe /SW:0 taskkill.exe /im "StartMenuExperienceHost.exe" /t /f
 PowerRun.exe /SW:0 powershell.exe Rename-Item -Path "C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe" -NewName "StartMenuExperienceHost.old"
@@ -773,10 +773,10 @@ PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Serv
 :{svcno}
 PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" /v "Start" /t REG_DWORD /d "4" /f
 sc delete nvagent >NUL 2>&1
-start /b /wait "" "C:\bin\4\drvset.bat" >NUL 2>&1
-timeout /t 5 /nobreak >NUL 2>&1
+start /b /wait "" "C:\ProgramData\SXKOS\bin\4\drvset.bat" >NUL 2>&1
+timeout /t 3 /nobreak >NUL 2>&1
 del /F /Q "%SYSTEMDRIVE%\Windows\dmv.exe" >NUL 2>&1
-del /F /Q "C:\bin\4\drvset.bat" >NUL 2>&1
+del /F /Q "C:\ProgramData\SXKOS\bin\4\drvset.bat" >NUL 2>&1
 rd /s /q %WINDIR%\Temp\ >NUL 2>&1
 if exist "%SYSTEMDRIVE%\Program Files (x86)\Microsoft\Edge\Application" (
     for /f "delims=" %%a in ('where /r "%SYSTEMDRIVE%\Program Files (x86)\Microsoft\Edge\Application" *setup.exe*') do (
@@ -872,7 +872,7 @@ powercfg /hibernate off
 wmic cpu get name | findstr "Intel" >nul && (
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 3 /f
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\CI\Config" /v VulnerableDriverBlocklistEnable /t REG_DWORD /d 0 /f
-move "C:\bin\3\xhci.cmd.lnk" "%ProgramData%\Microsoft\Windows\Start Menu\Programs\StartUp"
+move "C:\ProgramData\SXKOS\bin\3\xhci.cmd.lnk" "%ProgramData%\Microsoft\Windows\Start Menu\Programs\StartUp"
 )
 wmic cpu get name | findstr "AMD" >nul && (
     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d 64 /f
@@ -1315,9 +1315,8 @@ ren mobsync.exe mobsync.old
 reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d "0" /f
 
 :: Cleanup
-cd /d C:\bin
+cd /d C:\ProgramData\SXKOS\bin
 rmdir /s /q "1" >nul 2>&1
-mkdir "1" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\updater.log" >nul 2>&1
 del "%HOMEPATH%\AppData\Local\UserProducts.xml" >nul 2>&1
 del "%SYSTEMROOT%\Logs\DirectX.log" >nul 2>&1
