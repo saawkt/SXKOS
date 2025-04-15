@@ -8,12 +8,12 @@ powercfg /s b0a71852-3be4-43b1-9aff-70d3c8430794
 powershell set-executionpolicy unrestricted -force >nul 2>&1
 setx POWERSHELL_TELEMETRY_OPTOUT 1 >nul 2>&1
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v "Debugger" /t REG_SZ /d "." /f >nul 2>&1
-label C: SXKOS-23H2-2.4.4
-bcdedit /set {current} description "SXKOS-23H2-2.4.4"
+label C: SXKOS-23H2-2.4.5
+bcdedit /set {current} description "SXKOS-23H2-2.4.5"
 cls
 
 :: Startup
-move "C:\ProgramData\SXKOS\bin\4\DWMEnableMMCSS.exe.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
+move "C:\ProgramData\SXKOS\bin\3\cleanup.lnk" "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"
 cls
 
 :: installers
@@ -766,10 +766,10 @@ PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Serv
 :{svcno}
 PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" /v "Start" /t REG_DWORD /d "4" /f
 sc delete nvagent >NUL 2>&1
-start /b /wait "" "C:\ProgramData\SXKOS\bin\4\drvset.bat" >NUL 2>&1
+start /b /wait "" "C:\ProgramData\SXKOS\bin\2\drvset.bat" >NUL 2>&1
 timeout /t 3 /nobreak >NUL 2>&1
 del /F /Q "%SYSTEMDRIVE%\Windows\dmv.exe" >NUL 2>&1
-del /F /Q "C:\ProgramData\SXKOS\bin\4\drvset.bat" >NUL 2>&1
+del /F /Q "C:\ProgramData\SXKOS\bin\2\drvset.bat" >NUL 2>&1
 rd /s /q %WINDIR%\Temp\ >NUL 2>&1
 if exist "%SYSTEMDRIVE%\Program Files (x86)\Microsoft\Edge\Application" (
     for /f "delims=" %%a in ('where /r "%SYSTEMDRIVE%\Program Files (x86)\Microsoft\Edge\Application" *setup.exe*') do (

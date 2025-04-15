@@ -29,4 +29,4 @@ for %%A in ("%localappdata%\Microsoft\Windows\INetCache\IE\*") do (
     rd "%%A" /s /q >NUL 2>&1
 ) >NUL 2>&1
 powershell Clear-RecycleBin -Force >NUL 2>&1
-exit
+exit /b
