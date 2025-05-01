@@ -1,3 +1,27 @@
+**unsupported**
+• Manual Setup
+• Remote Desktop
+• CEIP
+• Speech Recognition
+• Cortana
+• Windows Hello
+• Windows Update
+• Windows Defender
+• Windows Search
+• Windows Recovery
+• POS devices
+• Input Method Editor (IME)
+• Windows Sandbox
+• HyperV
+• Accessibility tools.
+• Intel RST
+• Faceit. im not sure
+• CS 1.6 Anticheats. im not sure
+• Microsoft OneDrive
+• Cheating Software (works, but i don't provide support.)
+• Gamebar (works, but i don't provide support.)
+• Cracked Software (works, but i don't provide support.)
+
 **Software Rights Notice**
 
 The programs in this repository are the property of their respective developers and are protected by copyright and licensing laws. Unauthorized use, copying or distribution may result in legal penalties.  
