@@ -33,6 +33,10 @@ start /b /wait "" "C:\ProgramData\SXKOS\bin\1\7z2401-x64.msi" /passive >nul 2>&1
 rd /s /q "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\7-Zip"
 cls
 
+echo Installing vlc
+C:\ProgramData\SXKOS\bin\1\vlc-3.0.21-win64.exe /L=1033 /S
+del "C:\Users\Public\Desktop\VLC media player.lnk"
+
 echo Installing Lightshot
 call "C:\ProgramData\SXKOS\bin\1\lightshot.exe" /VERYSILENT /NORESTART
 timeout /t 2 /nobreak >NUL 2>&1

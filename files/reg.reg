@@ -1846,3 +1846,7 @@ C2,0A,01,D2,1E,26,4D,00,69,00,63,00,72,00,6F,00,73,00,6F,00,66,00,74,00,2E,\
 
 [HKEY_CLASSES_ROOT\AllFilesystemObjects\shellex\ContextMenuHandlers\SendTo]
 @=""
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System]
+"legalnoticecaption"="Welcome to SKXOS"
+"legalnoticetext"="this modified iso is completely free, if you paid for it, ask for a refund. "
