@@ -582,6 +582,22 @@ dmv /disable "PCI Data Acquisition and Signal Processing Controller"
 dmv /disable "Base System Device"
 timeout /t 3 /nobreak >NUL 2>&1
 
+:: Backup Default Services
+set BACKUP="%ProgramData%\SXKOS\Setup\3-Support\Services\Windows.Default.Services.reg"
+echo Windows Registry Editor Version 5.00 >>%BACKUP%
+
+for /f "delims=" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services"') do (
+    for /f "tokens=3" %%b in ('reg query "%%~a" /v "Start" 2^>nul') do (
+        for /l %%c in (0,1,4) do (
+            if "%%b"=="0x%%c" (
+                echo. >>%BACKUP%
+                echo [%%~a] >>%BACKUP%
+                echo "Start"=dword:0000000%%c >>%BACKUP%
+            ) 
+        ) 
+    ) 
+) >nul 2>&1
+
 :{done}
 REG ADD "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /V "1806" /T "REG_DWORD" /D "0000000000" /F
 REG ADD "HKLM\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Zones\3" /V "1806" /T "REG_DWORD" /D "0000000000" /F
@@ -1312,6 +1328,22 @@ PowerRun.exe /SW:0 cmd.exe /c del /F /Q "%SYSTEMDRIVE%\Windows\HelpPane.exe"
 
 :: Gamebar Presence Writer
 reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d "0" /f
+
+:: Backup SXKOS Services
+set BACKUP="%ProgramData%\SXKOS\Setup\3-Support\Services\SXKOS.services.reg"
+echo Windows Registry Editor Version 5.00 >>%BACKUP%
+
+for /f "delims=" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services"') do (
+    for /f "tokens=3" %%b in ('reg query "%%~a" /v "Start" 2^>nul') do (
+        for /l %%c in (0,1,4) do (
+            if "%%b"=="0x%%c" (
+                echo. >>%BACKUP%
+                echo [%%~a] >>%BACKUP%
+                echo "Start"=dword:0000000%%c >>%BACKUP%
+            ) 
+        ) 
+    ) 
+) >nul 2>&1
 
 :: Cleanup
 cd /d C:\ProgramData\SXKOS\bin

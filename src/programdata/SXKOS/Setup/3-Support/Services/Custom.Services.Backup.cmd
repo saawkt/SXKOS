@@ -1,5 +1,5 @@
-:: sc config wlansvc start=auto
-set BACKUP="%userprofile%\Desktop\backup-services.reg"
+@echo off
+set BACKUP="%~dp0\Custom.Backup.Services.reg"
 echo Windows Registry Editor Version 5.00 >>%BACKUP%
 
 for /f "delims=" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Services"') do (
