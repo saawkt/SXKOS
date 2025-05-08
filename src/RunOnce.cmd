@@ -3,10 +3,6 @@
 SETLOCAL EnableDelayedExpansion
 
 taskkill /im explorer.exe /f >nul 2>&1
-powercfg -import "C:\Windows\co.pow" b0a71852-3be4-43b1-9aff-70d3c8430794
-powercfg /s b0a71852-3be4-43b1-9aff-70d3c8430794
-powershell set-executionpolicy unrestricted -force >nul 2>&1
-setx POWERSHELL_TELEMETRY_OPTOUT 1 >nul 2>&1
 Reg.exe add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t "REG_DWORD" /d "100" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v "Debugger" /t REG_SZ /d "." /f >nul 2>&1
 label C: SXKOS-23H2-2.5.2
@@ -53,47 +49,70 @@ cls
 PowerRun.exe /SW:0 taskkill.exe /im "StartMenuExperienceHost.exe" /t /f
 PowerRun.exe /SW:0 powershell.exe Rename-Item -Path "C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy\StartMenuExperienceHost.exe" -NewName "StartMenuExperienceHost.old"
 
-::BCDEDIT SETTINGS
+start /b /wait "" "C:\ProgramData\SXKOS\bin\2\drvset.bat" >NUL 2>&1
+
+Echo "Disabling Process Mitigations"
+call %ProgramData%\SXKOS\bin\2\disable-process-mitigations.bat >nul 2>&1
 cls
-echo.
-echo Tweaking BCDedit...
+
+Echo "Disable reserved storage" 
+DISM /Online /Set-ReservedStorageState /State:Disabled >nul 2>&1
+
+Echo "Disabling Write Cache Buffer"
+	for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\SCSI"^| findstr "HKEY"') do (
+		for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg.exe add "%%a\Device Parameters\Disk" /v "CacheIsPowerProtected" /t REG_DWORD /d "1" /f > NUL 2>&1
+	)
+	for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\SCSI"^| findstr "HKEY"') do (
+		for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg.exe add "%%a\Device Parameters\Disk" /v "UserWriteCacheSetting" /t REG_DWORD /d "1" /f > NUL 2>&1
+	)
+)
+cls
+
+Echo "Execution Policy To Unrestricted"
+powershell set-executionpolicy unrestricted -force >nul 2>&1
+cls
+
+Echo "Editing Bcdedit"
+bcdedit /set {current} nx optin
+bcdedit /set disabledynamictick yes
+bcdedit /deletevalue useplatformclock
+bcdedit /set bootmenupolicy legacy
+bcdedit /set hypervisorlaunchtype off
+bcdedit /deletevalue useplatformtick
+bcdedit /set loadoptions SYSTEMWATCHDOGPOLICY=DISABLED
 bcdedit /timeout 10
-bcdedit /set useplatformtick Yes
-bcdedit /set disabledynamictick Yes
-bcdedit /set bootmenupolicy Legacy
-bcdedit /set quietboot On
-bcdedit /set nx OptIn
-timeout /t 3 /nobreak >NUL 2>&1
+cls
 
 ::Configurar Device Manager
 ::Nirsoft Software
 cls
 echo.
-echo Setting up Device Manager...
-dmv /disable "System Speaker"
-dmv /disable "System Timer"
-dmv /disable "High precision event timer"
-dmv /disable "WAN Miniport (IKEv2)"
-dmv /disable "WAN Miniport (IP)"
-dmv /disable "WAN Miniport (IPv6)"
-dmv /disable "WAN Miniport (L2TP)"
-dmv /disable "WAN Miniport (Network Monitor)"
-dmv /disable "WAN Miniport (PPPOE)"
-dmv /disable "WAN Miniport (PPTP)"
-dmv /disable "WAN Miniport (SSTP)"
-dmv /disable "Direct memory access controller"
-dmv /disable "System CMOS/real time clock"
-dmv /disable "Unknown device"
+Echo "Disabling Device Manager Devices"
+dmv /disable "Direct memory access Controller"
+dmv /disable "High Precision Event Timer"
+dmv /disable "Microsoft GS Wavetable Synth"
+dmv /disable "Remote Desktop Device Redirector Bus"
+dmv /disable "NDIS Virtual Network Adapter Enumerator"
+dmv /disable "Microsoft Virtual Drive Enumerator"
 dmv /disable "UMBus Root Bus Enumerator"
-dmv /disable "Programmable Interrupt Controller"
-dmv /disable "Composite Bus Enumerator"
-dmv /disable "Numeric Data Processor"
-dmv /disable "Legacy Device"
+dmv /disable "Programmable interrupt controller"
+dmv /disable "Legacy device"
+dmv /disable "Numeric data processor"
+dmv /disable "Generic Bluetooth Adapter"
+dmv /disable "Microsoft Hyper-V Virtualization Infrastructure Driver"
+dmv /disable "System Speaker"
+dmv /disable "PCI Encryption/Decryption Controller"
+dmv /disable "AMD PSP"
+dmv /disable "Intel SMBus"
+dmv /disable "Intel Management Engine"
 dmv /disable "PCI Memory Controller"
-dmv /disable "PCI Simple Communications Controller"
-dmv /disable "SM Bus Controller"
-dmv /disable "PCI Data Acquisition and Signal Processing Controller"
-dmv /disable "Base System Device"
+dmv /disable "PCI standard RAM Controller"
+dmv /disable "System Timer"
+dmv /disable "Communications Port (COM1)"
+dmv /disable "Fax"
+dmv /disable "Microsoft Print to PDF"
+dmv /disable "Microsoft XPS Document Writer"
+dmv /disable "Root Print Queue"
 timeout /t 3 /nobreak >NUL 2>&1
 
 :: Backup Default Services
@@ -301,7 +320,6 @@ PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Serv
 :{svcno}
 PowerRun.exe /SW:0 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" /v "Start" /t REG_DWORD /d "4" /f
 sc delete nvagent >NUL 2>&1
-start /b /wait "" "C:\ProgramData\SXKOS\bin\2\drvset.bat" >NUL 2>&1
 timeout /t 3 /nobreak >NUL 2>&1
 del /F /Q "%SYSTEMDRIVE%\Windows\dmv.exe" >NUL 2>&1
 del /F /Q "C:\ProgramData\SXKOS\bin\2\drvset.bat" >NUL 2>&1
@@ -485,7 +503,9 @@ for /f "delims=" %%a in ('reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersi
 for /f "delims=" %%a in ('reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\MMDevices\Audio\Render') do PowerRun.exe /SW:0 Reg.exe add "%%a\Properties" /v "{b3f8fa53-0004-438e-9003-51a46e139bfc},4" /t REG_DWORD /d "0" /f >nul 2>&1
 cls
 
-:: power tweaks
+Echo "Editing POW & power tweaks"
+powercfg -import "C:\Windows\co.pow" b0a71852-3be4-43b1-9aff-70d3c8430794
+powercfg /s b0a71852-3be4-43b1-9aff-70d3c8430794
 powercfg -h off
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t Reg_DWORD /d "0" /f  >nul 2>&1
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "HibernateEnabled" /t Reg_DWORD /d "0" /f  >nul 2>&1
@@ -497,6 +517,25 @@ wevtutil set-log "Microsoft-Windows-SleepStudy/Diagnostic" /e:false >nul 2>&1
 wevtutil set-log "Microsoft-Windows-Kernel-Processor-Power/Diagnostic" /e:false >nul 2>&1
 wevtutil set-log "Microsoft-Windows-UserModePowerService/Diagnostic" /e:false >nul 2>&1
 cls
+
+if "%DEVICE_TYPE%" == "LAPTOP" (
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\serenum" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\sermouse" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\serial" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "0" /f
+    powercfg /setactive 381b4222-f694-41f0-9685-ff5bb260df2e
+    powercfg /d a1841308-3541-4fab-bc81-f71556f20b4a
+    powercfg /d 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+    cls
+) else (
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DisplayEnhancementService" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bam" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
+    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f  >nul 2>&1
+    powercfg /d a1841308-3541-4fab-bc81-f71556f20b4a
+    powercfg /d 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+    powercfg /d 381b4222-f694-41f0-9685-ff5bb260df2e
+    cls
+)
 
 :: Scheduled Tasks
 Echo "Optimizing Scheduled Tasks"
@@ -772,18 +811,11 @@ for /f "delims=:{}" %%a in ('wmic path Win32_SystemEnclosure get ChassisTypes ^|
 set "DEVICE_TYPE=PC"
 for %%a in (8 9 10 11 12 13 14 18 21 30 31 32) do if "%CHASSIS%" == "%%a" (set "DEVICE_TYPE=LAPTOP")
 
-if "%DEVICE_TYPE%" == "LAPTOP" (
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\serenum" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\sermouse" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\serial" /v "Start" /t REG_DWORD /d "3" /f >nul 2>&1
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "0" /f
-    cls
-) else (
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\DisplayEnhancementService" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\bam" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
-    Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f  >nul 2>&1
-    cls
-)
+Echo "Changing fsutil behaviors"
+fsutil behavior set disable8dot3 1 > NUL 2>&1
+fsutil behavior set disablelastaccess 1 > NUL 2>&1
+fsutil behavior set disabledeletenotify 0 > NUL 2>&1
+cls
 
 Echo "Fix explorer white bar bug"
 cmd /c "start C:\Windows\explorer.exe"
