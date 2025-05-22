@@ -5,8 +5,8 @@ SETLOCAL EnableDelayedExpansion
 taskkill /im explorer.exe /f >nul 2>&1
 Reg.exe add "HKCU\Control Panel\Desktop" /v "JPEGImportQuality" /t "REG_DWORD" /d "100" /f
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\taskmgr.exe" /v "Debugger" /t REG_SZ /d "." /f >nul 2>&1
-label C: SXKOS-23H2-2.5.2
-bcdedit /set {current} description "SXKOS-23H2-2.5.2"
+label C: SXKOS-23H2-2.6.1
+bcdedit /set {current} description "SXKOS-23H2-2.6.1"
 cls
 
 :: Startup
@@ -865,10 +865,12 @@ takeown /f "SearchHost.exe"
 icacls "%systemdrive%\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\SearchHost.exe" /grant Administrators:F
 ren SearchHost.exe SearchHost.old
 taskkill /f /im SearchHost.exe /t
+
 cd %systemdrive%\Windows\System32
 takeown /f "mobsync.exe"
 icacls "%systemdrive%\Windows\System32\mobsync.exe" /grant Administrators:F
 ren mobsync.exe mobsync.old
+
 PowerRun.exe /SW:0 taskkill.exe /im "HelpPane.exe" /t /f >NUL 2>&1
 PowerRun.exe /SW:0 cmd.exe /c del /F /Q "%SYSTEMDRIVE%\Windows\HelpPane.exe"
 
